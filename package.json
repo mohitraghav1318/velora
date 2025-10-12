@@ -1,0 +1,27 @@
+{
+  "name": "velora",
+  "version": "1.0.0",
+  "description": "**Velora** is a simple full-stack website I built while learning web development.   It's designed for people who love to travel — allowing users to explore hotels, rest areas, and even list their own places.   Currently, the site focuses on browsing and listing locations. A booking system will be added soon.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Mohit Raghav",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "ejs-mate": "^4.0.0",
+    "express": "^5.1.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.19.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohitraghav1318/velora.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mohitraghav1318/velora/issues"
+  },
+  "homepage": "https://github.com/mohitraghav1318/velora#readme"
+}
