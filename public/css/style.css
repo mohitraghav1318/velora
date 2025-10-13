@@ -1,5 +1,15 @@
 /* style.css */
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
 .navbar {
     height: 5rem;
     background-color: white;
@@ -63,4 +73,16 @@
 .card-text p {
     font-weight: 400 !important;
 
+}
+
+.show-img {
+    border-radius: 1rem;
+    object-fit: cover;
+}
+
+.edit-btn {
+    text-decoration: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
 }

@@ -1,23 +1,56 @@
 <% layout("/layouts/boilerplate") -%>
 
     <body>
-        <h3>New Listing</h3>
-        <form action="/listings" method="POST">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required><br><br>
+        <div class="row">
+            <div class="col-8 offset-2">
+                <h1>Create New Listing</h1>
+                <form action="/listings" method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-lable">Title:</label>
+                        <input type="text" placeholder="Enter Title" id="title" name="title" class="form-control"
+                            required>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required></textarea><br><br>
+                    </div>
 
-            <label for="price">Price (in INR):</label>
-            <input type="number" id="price" name="price" required><br><br>
+                    <div class="mb-3">
+                        <label for="description" class="form-lable">Description:</label>
+                        <textarea id="description" placeholder="Enter Description" name="description"
+                            class="form-control" required></textarea>
 
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" required><br><br>
+                    </div>
 
-            <label for="country">Country:</label>
-            <input type="text" id="country" name="country" required><br><br>
+                    <div class="mb-3">
+                        <label for="image" class="form-lable">Image URL:</label>
+                        <input type="text" placeholder="Enter Image URL" id="image" name="image" class="form-control">
+                    </div>
 
-            <button type="submit">Create Listing</button>
-        </form>
-    </body>
+
+
+                    <div class="row">
+
+                        <div class="mb-3 col-md-4">
+                            <label for="price" class="form-lable">Price (in INR):</label>
+                            <input type="number" placeholder="Enter Price for per Night" id="price" name="price"
+                                class="form-control" required>
+
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <label for="location" class="form-lable">Location:</label>
+                            <input type="text" placeholder="Enter Location" id="location" name="location"
+                                class="form-control" required>
+
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <label for="country" class="form-lable">Country:</label>
+                            <input type="text" placeholder="Enter Country" id="country" name="country"
+                                class="form-control" required>
+
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger mb-3" type="submit">Create Listing</button>
+                </form>
+            </div>
+        </div>

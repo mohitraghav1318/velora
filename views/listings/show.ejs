@@ -1,29 +1,34 @@
 <% layout("/layouts/boilerplate") -%>
 
     <body>
-        <h3>Listing Details</h3>
-        <ul>
-            <li>
-                <%=listing.title%>
-            </li>
-            <li>
-                <%=listing.description%>
-            </li>
-            <li>
-                &#8377;<%=listing.price.toLocaleString("en-IN")%>
-            </li>
-            <li>
-                <%=listing.location%>
-            </li>
-            <li>
-                <%=listing.country%>
-            </li>
-        </ul>
-        <button><a href="/listings/<%=listing._id%>/edit">Edit</a></button>
-        <form action="/listings" method="GET">
-            <button>All Listings</button>
-        </form>
-        <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
-            <button>Delete</button>
-        </form>
-    </body>
+        <h1 class="text-center my-4">Listing Details</h1>
+        <div class="row">
+            <div class="col-8 offset-2">
+                <div class="card col-md-6 mb-3">
+                    <img src="<%=listing.image.url%>" class="show-img" alt="listing-image"
+                        style="height: 20rem; width:100%;">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <%=listing.title%>
+                    </h4>
+                    <p class="card-text">
+                        <%=listing.description%>
+                    </p>
+
+                    <h5>&#8377;<%=listing.price.toLocaleString("en-IN")%> /night</h5>
+                    <h5 class="text-secondary">Location: <%=listing.location%>, <%=listing.country%>
+                    </h5>
+
+                </div>
+
+                <div class="d-flex gap-2 mb-3">
+                    <button class="btn btn-danger"><a class="edit-btn"
+                            href="/listings/<%=listing._id%>/edit">Edit</a></button>
+
+                    <form action="/listings/<%=listing._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-dark ">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
