@@ -4,19 +4,23 @@
         <div class="row">
             <div class="col-8 offset-2">
                 <h1>Create New Listing</h1>
-                <form action="/listings" method="POST">
+                <form action="/listings" method="POST" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="title" class="form-lable">Title:</label>
                         <input type="text" placeholder="Enter Title" id="title" name="title" class="form-control"
                             required>
-
+                        <div class="invalid-feedback">
+                            Title is required.
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-lable">Description:</label>
                         <textarea id="description" placeholder="Enter Description" name="description"
                             class="form-control" required></textarea>
-
+                        <div class="invalid-feedback">
+                            Description is required.
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -32,13 +36,18 @@
                             <label for="price" class="form-lable">Price (in INR):</label>
                             <input type="number" placeholder="Enter Price for per Night" id="price" name="price"
                                 class="form-control" required>
-
+                            <div class="invalid-feedback">
+                                Price is required.
+                            </div>
                         </div>
 
                         <div class="mb-3 col-md-4">
                             <label for="location" class="form-lable">Location:</label>
                             <input type="text" placeholder="Enter Location" id="location" name="location"
                                 class="form-control" required>
+                            <div class="invalid-feedback">
+                                Location is required.
+                            </div>
 
                         </div>
 
@@ -46,6 +55,9 @@
                             <label for="country" class="form-lable">Country:</label>
                             <input type="text" placeholder="Enter Country" id="country" name="country"
                                 class="form-control" required>
+                            <div class="invalid-feedback">
+                                Country is required.
+                            </div>
 
                         </div>
                     </div>

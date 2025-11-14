@@ -8,8 +8,6 @@ const ejsMate = require('ejs-mate');
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
 
-
-
 const MONGO_URI = 'mongodb://127.0.0.1:27017/veloraDB';
 main().then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err));
@@ -49,10 +47,14 @@ app.get('/listings/:id', async (req, res) => {
 
 
 //create route to create a new listing
-app.post('/listings', express.urlencoded({ extended: true }), async (req, res) => {
-    const newListing = new Listing(req.body);
-    await newListing.save();
-    res.redirect(`/listings/${newListing._id}`);
+app.post('/listings', express.urlencoded({ extended: true }), async (req, res, next) => {
+    try {
+        const newListing = new Listing(req.body);
+        await newListing.save();
+        res.redirect(`/listings/${newListing._id}`);
+    } catch (err) {
+        next(err);
+    }
 });
 
 //edit route to display a form to edit a listing
@@ -76,21 +78,10 @@ app.delete('/listings/:id', async (req, res) => {
     res.redirect('/listings');
 });
 
-// app.get("/testListing", async (req, res) => {
-//     let newListing = new Listing({
-//         title: "Test Listing",
-//         description: "This is a test listing",
-//         price: 100,
-//         location: "Test Location",
-//         country: "Test Country",
-//     });
-
-//     await newListing.save();
-//     console.log("New listing created:");
-//     res.send("New listing created");
-// });
-
+app.use((err, req, res, next) => {
+    res.send('Something went wrong!');
+});
 
 app.listen(8080, () => {
-    console.log('Server is running on port 8080');
+    console.log('Server is running on http://localhost:8080/listings');
 });

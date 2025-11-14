@@ -23,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/mohitraghav1318/velora/issues"
   },
-  "homepage": "https://github.com/mohitraghav1318/velora#readme"
+  "homepage": "https://github.com/mohitraghav1318/velora#readme",
+  "devDependencies": {}
 }
