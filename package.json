@@ -4,6 +4,8 @@
   "description": "**Velora** is a simple full-stack website I built while learning web development.   It's designed for people who love to travel — allowing users to explore hotels, rest areas, and even list their own places.   Currently, the site focuses on browsing and listing locations. A booking system will be added soon.",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +25,5 @@
   "bugs": {
     "url": "https://github.com/mohitraghav1318/velora/issues"
   },
-  "homepage": "https://github.com/mohitraghav1318/velora#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/mohitraghav1318/velora#readme"
 }
