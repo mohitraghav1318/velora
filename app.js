@@ -7,7 +7,9 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapAsync.js');
 const ExpressError = require('./utils/ExpressError.js');
-const { listingSchema } = require('./schema.js');
+const { listingSchema, reviewSchema } = require('./schema.js');
+const Review = require('./models/review');
+
 
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
@@ -35,9 +37,23 @@ const validateListing = (req, res, next) => {
     }
 };
 
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(',');
+        throw new ExpressError(400, errMsg);
+    }
+    else {
+        next();
+    }
+};
+
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));  // to support PUT and DELETE methods via forms
 
 
@@ -62,10 +78,10 @@ app.get('/listings/:id', wrapAsync(async (req, res) => {
 
 
 //create route 
-app.post('/listings', validateListing, express.urlencoded({ extended: true }),
+app.post('/listings', validateListing,
     wrapAsync(async (req, res, next) => {
         const newListing = new Listing(req.body);
-        if (!newListinng.description)
+        if (!newListing.description)
             await newListing.save();
         res.redirect(`/listings/${newListing._id}`);
     })
@@ -79,7 +95,7 @@ app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
 }));
 
 //update route to update a listing
-app.put('/listings/:id', validateListing, express.urlencoded({ extended: true }), wrapAsync(async (req, res) => {
+app.put('/listings/:id', validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndUpdate(id, req.body);
     res.redirect(`/listings/${id}`);
@@ -91,6 +107,24 @@ app.delete('/listings/:id', wrapAsync(async (req, res) => {
     await Listing.findByIdAndDelete(id);
     res.redirect('/listings');
 }));
+
+//review routes
+app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
+
+    const listing = await Listing.findById(req.params.id);
+    const newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    console.log("Review Added");
+    res.send("Review Added");
+    console.log(req.body);
+
+}));
+
 
 
 app.use((req, res, next) => {
