@@ -1,16 +1,14 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const Listing = require('./models/listing');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require('./utils/wrapAsync.js');
 const ExpressError = require('./utils/ExpressError.js');
-const { listingSchema, reviewSchema } = require('./schema.js');
 const Review = require('./models/review');
 
 const listings = require('./routes/listings');
+const reviews = require('./routes/review');
 
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
@@ -33,48 +31,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/listings', listings);
-
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(',');
-        throw new ExpressError(400, errMsg);
-    }
-    else {
-        next();
-    }
-};
-
+app.use('/listings/:id/reviews', reviews);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-
-// post review routes
-app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
-
-    const listing = await Listing.findById(req.params.id);
-    const newReview = new Review(req.body.review);
-
-    listing.reviews.push(newReview);
-
-    await newReview.save();
-    await listing.save();
-
-    res.redirect(`/listings/${listing._id}`);
-
-
-}));
-
-//delete review route
-app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-
-    res.redirect(`/listings/${id}`);
-}));
 
 
 

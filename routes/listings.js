@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Listing = require('../models/listing');
 const wrapAsync = require('../utils/wrapAsync.js');
-const { listingSchema } = require('../schema.js');
 const ExpressError = require('../utils/ExpressError.js');
+const Listing = require('../models/listing');
+const { listingSchema } = require('../schema.js');
 
 //middleware to validate listing data
 const validateListing = (req, res, next) => {
