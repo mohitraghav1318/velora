@@ -11,8 +11,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 
-const listings = require('./routes/listings');
-const reviews = require('./routes/review');
+const listingRouter = require('./routes/listings');
+const reviewRouter = require('./routes/review');
+const userRouter = require('./routes/user');
 
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
@@ -59,8 +60,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/listings', listings);
-app.use('/listings/:id/reviews', reviews);
+app.get('/demouser', async (req, res) => {
+    let fakeUser = new User({ email: 'mohit@gmail.com', username: 'mohit' });
+    let registeredUser = await User.register(fakeUser, 'mohit123');
+    res.send(registeredUser);
+});
+
+
+app.use('/listings', listingRouter);
+app.use('/listings/:id/reviews', reviewRouter);
+app.use('/', userRouter);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
