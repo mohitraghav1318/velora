@@ -45,6 +45,24 @@ async function startServer() {
         app.use(express.urlencoded({ extended: true }));
         app.use(methodOverride("_method"));
 
+        // 🔥 SAFE JSON HANDLER (prevents Render JSON crash)
+        app.use((req, res, next) => {
+            if (req.headers["content-type"]?.includes("application/json")) {
+                let data = "";
+                req.on("data", chunk => data += chunk);
+                req.on("end", () => {
+                    try {
+                        JSON.parse(data);
+                        next();
+                    } catch {
+                        return next(); // ignore invalid JSON instead of crashing
+                    }
+                });
+            } else {
+                next();
+            }
+        });
+
         // 4️⃣ Session Store
         const store = MongoStore.create({
             mongoUrl: dbURL,
@@ -57,7 +75,7 @@ async function startServer() {
 
         app.use(session({
             store,
-            secret: process.env.SECRET,
+            secret: process.env.SECRET || "fallbacksecret",
             resave: false,
             saveUninitialized: false,
             cookie: {
@@ -78,7 +96,7 @@ async function startServer() {
         passport.serializeUser(User.serializeUser());
         passport.deserializeUser(User.deserializeUser());
 
-        // 6️⃣ Global Locals (VERY IMPORTANT)
+        // 6️⃣ Global Locals
         app.use((req, res, next) => {
             res.locals.currUser = req.user || null;
             res.locals.success = req.flash("success");
@@ -102,6 +120,7 @@ async function startServer() {
 
         // 9️⃣ Error Handler
         app.use((err, req, res, next) => {
+            console.error("ERROR:", err);
             const { statusCode = 500, message = "Something went Wrong!" } = err;
             res.status(statusCode).render("error.ejs", { statusCode, message });
         });
