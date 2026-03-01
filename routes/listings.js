@@ -25,6 +25,10 @@ router.get('/:id', wrapAsync(async (req, res) => {
             path: "reviews",
             populate: { path: "author" },
         });
+    if (!listing) {
+        req.flash('error', 'Listing not found!');
+        return res.redirect('/listings');
+    }
 
     res.render("./listings/show.ejs", { listing });
 }));

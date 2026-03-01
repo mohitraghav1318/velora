@@ -42,31 +42,28 @@ async function startServer() {
 
         // 3️⃣ Basic Middleware
         app.use(express.static(path.join(__dirname, "public")));
+        app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(methodOverride("_method"));
-
-        // 🔥 SAFE JSON HANDLER (prevents Render JSON crash)
-        app.use((req, res, next) => {
-            if (req.headers["content-type"]?.includes("application/json")) {
-                let data = "";
-                req.on("data", chunk => data += chunk);
-                req.on("end", () => {
-                    try {
-                        JSON.parse(data);
-                        next();
-                    } catch {
-                        return next(); // ignore invalid JSON instead of crashing
-                    }
-                });
-            } else {
-                next();
-            }
-        });
 
         // 4️⃣ Session Store
         const store = MongoStore.create({
             mongoUrl: dbURL,
             collectionName: "sessions",
+            serialize: (session) => JSON.stringify(session),
+            unserialize: (payload) => {
+                if (payload && typeof payload === "object") {
+                    return payload;
+                }
+                if (typeof payload !== "string") {
+                    return null;
+                }
+                try {
+                    return JSON.parse(payload);
+                } catch {
+                    return null;
+                }
+            },
         });
 
         store.on("error", (err) => {
@@ -120,6 +117,12 @@ async function startServer() {
 
         // 9️⃣ Error Handler
         app.use((err, req, res, next) => {
+            if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+                return res.status(400).render("error.ejs", {
+                    statusCode: 400,
+                    message: "Invalid JSON payload",
+                });
+            }
             console.error("ERROR:", err);
             const { statusCode = 500, message = "Something went Wrong!" } = err;
             res.status(statusCode).render("error.ejs", { statusCode, message });
