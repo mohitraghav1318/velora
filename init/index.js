@@ -1,8 +1,9 @@
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const mongoose = require('mongoose');
 const Listing = require('../models/listing');
 const initData = require('./data.js');
-
-const MONGO_URI = 'mongodb://127.0.0.1:27017/veloraDB';
+const MONGO_URI = process.env.ATLASDB_URL
 
 async function main() {
     await mongoose.connect(MONGO_URI);
@@ -15,7 +16,7 @@ async function initDB() {
     await Listing.deleteMany({});
     initData.data = initData.data.map((obj) => ({
         ...obj,
-        owner: "699ab1c57f367eccd76f864c",
+        owner: "69a4472be812d31cad74bc2d",
     }));
     await Listing.insertMany(initData.data);
     console.log("Database initialized with data");

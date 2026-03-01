@@ -20,33 +20,21 @@ const reviewRouter = require("./routes/review");
 const userRouter = require("./routes/user");
 
 const app = express();
+app.set("trust proxy", 1);
+
 const dbURL = process.env.ATLASDB_URL;
 const PORT = process.env.PORT || 8080;
 
-/* ======================
-   START SERVER FUNCTION
-====================== */
-
 async function startServer() {
     try {
-        // 1️⃣ Connect to MongoDB
         await mongoose.connect(dbURL);
         console.log("✅ Connected to MongoDB");
 
-        // 2️⃣ Create Mongo Session Store (after connection)
         const store = MongoStore.create({
             mongoUrl: dbURL,
             collectionName: "sessions",
-            crypto: {
-                secret: process.env.SECRET,
-            },
         });
 
-        store.on("error", (err) => {
-            console.log("SESSION STORE ERROR", err);
-        });
-
-        // 3️⃣ Session Middleware
         app.use(session({
             store,
             secret: process.env.SECRET || "fallbacksecret",
@@ -60,7 +48,6 @@ async function startServer() {
 
         app.use(flash());
 
-        // 4️⃣ Passport Setup
         app.use(passport.initialize());
         app.use(passport.session());
 
@@ -68,15 +55,14 @@ async function startServer() {
         passport.serializeUser(User.serializeUser());
         passport.deserializeUser(User.deserializeUser());
 
-        // 5️⃣ Global Locals Middleware
+        // 🔥 GLOBAL LOCALS (THIS IS THE KEY)
         app.use((req, res, next) => {
+            res.locals.currUser = req.user || null;
             res.locals.success = req.flash("success");
             res.locals.error = req.flash("error");
-            res.locals.currUser = req.user || null;
             next();
         });
 
-        // 6️⃣ Express Config
         app.engine("ejs", ejsMate);
         app.set("view engine", "ejs");
         app.set("views", path.join(__dirname, "views"));
@@ -85,28 +71,23 @@ async function startServer() {
         app.use(express.urlencoded({ extended: true }));
         app.use(methodOverride("_method"));
 
-        // 7️⃣ Routes
         app.get("/", (req, res) => {
-            res.send("Hello World");
+            res.redirect("/listings");
         });
 
         app.use("/listings", listingRouter);
         app.use("/listings/:id/reviews", reviewRouter);
         app.use("/", userRouter);
 
-        // 8️⃣ 404 Handler
         app.use((req, res, next) => {
             next(new ExpressError(404, "Page Not Found"));
         });
 
-        // 9️⃣ Error Handler
         app.use((err, req, res, next) => {
-            if (res.headersSent) return next(err);
             const { statusCode = 500, message = "Something went Wrong!" } = err;
             res.status(statusCode).render("error.ejs", { statusCode, message });
         });
 
-        // 🔟 Start Server
         app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
         });
