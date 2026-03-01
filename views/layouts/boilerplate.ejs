@@ -14,10 +14,9 @@
 </head>
 
 <body>
-    <%- include("../includes/navbar.ejs") %>
-
+    <%- include("../includes/navbar.ejs", { currUser: locals.currUser }) %>
         <div class="container">
-            <%- include("../listings/flash.ejs") %>
+            <%- include("../listings/flash.ejs", { success: locals.success, error: locals.error }) %>
                 <%- body %>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

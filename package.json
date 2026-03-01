@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "24.13.1"
+  },
   "name": "velora",
   "version": "1.0.0",
   "description": "**Velora** is a simple full-stack website I built while learning web development.   It's designed for people who love to travel — allowing users to explore hotels, rest areas, and even list their own places.   Currently, the site focuses on browsing and listing locations. A booking system will be added soon.",
@@ -12,8 +15,11 @@
   "author": "Mohit Raghav",
   "license": "ISC",
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
     "express": "^5.1.0",
@@ -22,6 +28,8 @@
     "joi": "^17.13.3",
     "method-override": "^3.0.0",
     "mongoose": "^8.19.1",
+    "multer": "^2.1.0",
+    "multer-storage-cloudinary": "^4.0.0",
     "nvm": "^0.0.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
