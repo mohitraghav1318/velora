@@ -15,7 +15,6 @@
   "author": "Mohit Raghav",
   "license": "ISC",
   "dependencies": {
-    "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -28,8 +27,6 @@
     "joi": "^17.13.3",
     "method-override": "^3.0.0",
     "mongoose": "^8.19.1",
-    "multer": "^2.1.0",
-    "multer-storage-cloudinary": "^4.0.0",
     "nvm": "^0.0.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",

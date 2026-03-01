@@ -57,7 +57,7 @@ async function startServer() {
 
         app.use(session({
             store,
-            secret: process.env.SECRET || "fallbacksecret",
+            secret: process.env.SECRET,
             resave: false,
             saveUninitialized: false,
             cookie: {
