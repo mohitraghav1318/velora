@@ -14,12 +14,12 @@
 <body>
 
     <!-- 🔥 DO NOT PASS LOCALS MANUALLY -->
-    <%- include("../includes/navbar", { currUser: currUser || null }) %>
+    <%- include("../includes/navbar", { currUser: locals.currUser }) %>
 
         <div class="container mt-3">
 
             <!-- Flash Messages -->
-            <%- include("../listings/flash", { success: success, error: error }) %>
+            <%- include("../listings/flash", { success: locals.success, error: locals.error }) %>
 
                 <!-- Page Content -->
                 <%- body %>
